@@ -87,7 +87,7 @@ extension PokemonListViewController: UITableViewDelegate {
         
         if indexPath.row == presenter.rowOfList - 10, !presenter.isNowLoading {
             presenter.updateList()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.tableView.reloadData()
             }
         }
