@@ -52,6 +52,8 @@ class PokemonListPresenter: PokemonListPresenterSpec {
     
     // TODO: fetchPokemonData
     private func fetchPokemon() {
-        
+        for i in 1...30 {
+            pokemon += [PokemonModel(name: "pok\(i)")]
+        }
     }
 }
