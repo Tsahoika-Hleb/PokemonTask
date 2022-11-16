@@ -41,7 +41,7 @@
 		FCB4982829257C6F009967EE /* RemotePokemonsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB4982729257C6F009967EE /* RemotePokemonsRepository.swift */; };
 		FCB4982A29257CDA009967EE /* NetworkFetchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB4982929257CDA009967EE /* NetworkFetchable.swift */; };
 		FCB4982C29257F4D009967EE /* PokemonListFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB4982B29257F4D009967EE /* PokemonListFetcher.swift */; };
-		FCB4982F29259D55009967EE /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB4982E29259D55009967EE /* UIImageView+Extensions.swift */; };
+		FCB498322925A52D009967EE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = FCB498312925A52D009967EE /* SDWebImage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,7 +100,6 @@
 		FCB4982729257C6F009967EE /* RemotePokemonsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePokemonsRepository.swift; sourceTree = "<group>"; };
 		FCB4982929257CDA009967EE /* NetworkFetchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkFetchable.swift; sourceTree = "<group>"; };
 		FCB4982B29257F4D009967EE /* PokemonListFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonListFetcher.swift; sourceTree = "<group>"; };
-		FCB4982E29259D55009967EE /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCB498322925A52D009967EE /* SDWebImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,7 +228,6 @@
 		FCB16A4329225B3800192135 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				FCB4982D29259D10009967EE /* Extensions */,
 				FCB16A4129225B2D00192135 /* Constants.swift */,
 			);
 			path = Other;
@@ -341,14 +340,6 @@
 			path = Remote;
 			sourceTree = "<group>";
 		};
-		FCB4982D29259D10009967EE /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				FCB4982E29259D55009967EE /* UIImageView+Extensions.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -365,6 +356,9 @@
 			dependencies = (
 			);
 			name = PokemonTask;
+			packageProductDependencies = (
+				FCB498312925A52D009967EE /* SDWebImage */,
+			);
 			productName = PokemonTask;
 			productReference = FCB16A0B292254F300192135 /* PokemonTask.app */;
 			productType = "com.apple.product-type.application";
@@ -437,6 +431,9 @@
 				Base,
 			);
 			mainGroup = FCB16A02292254F300192135;
+			packageReferences = (
+				FCB498302925A52D009967EE /* XCRemoteSwiftPackageReference "SDWebImage" */,
+			);
 			productRefGroup = FCB16A0C292254F300192135 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -485,7 +482,6 @@
 				FCB4982A29257CDA009967EE /* NetworkFetchable.swift in Sources */,
 				FCB4982429256316009967EE /* PokemonRepositorySpec.swift in Sources */,
 				FCB4982829257C6F009967EE /* RemotePokemonsRepository.swift in Sources */,
-				FCB4982F29259D55009967EE /* UIImageView+Extensions.swift in Sources */,
 				FCB16A5D292292D900192135 /* ViewBuilderSpec.swift in Sources */,
 				FCB4981B29248493009967EE /* RemotePokemonModel.swift in Sources */,
 				FCB16A772923285500192135 /* LoadingTableViewCell.swift in Sources */,
@@ -856,6 +852,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FCB498302925A52D009967EE /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FCB498312925A52D009967EE /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FCB498302925A52D009967EE /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		FCB16A17292254F300192135 /* PokemonTask.xcdatamodeld */ = {

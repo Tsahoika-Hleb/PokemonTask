@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class PokemonListViewController: BaseViewController {
     
@@ -80,8 +81,8 @@ extension PokemonListViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: K.pokemonListTableViewCellID, for: indexPath) as! PokemonListTableViewCell
             let viewModel = presenter.getCellModel(by: indexPath.row)
             cell.nameLabel.text = viewModel.name
-            //cell.pokemonImage =
             //cell.pokemonImage = UIImageView(image: UIImage(named: "pikachu"))
+            cell.pokemonImage.sd_setImage(with: URL(string: viewModel.image)) // TODO: CHANGE
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: K.loadingTableViewCellID, for: indexPath) as! LoadingTableViewCell
