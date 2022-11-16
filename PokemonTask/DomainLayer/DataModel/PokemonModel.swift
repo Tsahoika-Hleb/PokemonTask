@@ -7,24 +7,40 @@
 
 import Foundation
 
-struct PokemonModel {
-    
+struct PokemonModel: Codable {    
     let name: String
-    var imageName: String = "image"// TODO: ??
-    let types: [String] = []
-    let height: Float = 0 // in decimetres in api.
-    let weight: Float = 0// in in hectograms in api.
-    /*
-    "sprites": {
-        "front_default":
-        "other": {
-            "dream_world": {
-                "front_default":
-            }
-            "home": {
-                "front_default":
-            }
-        }
+    let height: Int
+    let weight: Int
+    let types: [PokemonType]
+    let sprites: Sprites
+    let id: Int
+    
+    
+    struct Sprites: Codable {
+        let front_default: String
+        let other: OtherSprites
     }
-     */
+    
+    struct OtherSprites: Codable {
+        let dream_world: DreamWorld
+        let home: Home
+    }
+    
+    struct DreamWorld: Codable {
+        let front_default: String
+    }
+    
+    struct Home: Codable {
+        let front_default: String
+    }
+    
+    struct PokemonType: Codable {
+        let type: PokemonTypeName
+    }
+    
+    struct PokemonTypeName: Codable {
+        let name: String
+    }
+    
+    
 }

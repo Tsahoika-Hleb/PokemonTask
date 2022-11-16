@@ -9,26 +9,33 @@ import Foundation
 
 protocol PokemonListPresenterSpec {
     
+    var eventReceiver: PokemonListViewEventReceiverable? { get set }
     var rowOfList: Int { get }
+    var isNowLoading: Bool { get set }
     
     func updateList()
     func didSelect(at row: Int)
     func getCellModel(by row: Int) -> PokemonListCellModel
 }
 
-struct PokemonListViewSetupModel {
-    let title: String
+protocol PokemonListViewEventReceiverable: AnyObject {
+    func receivedEventOfRefreshList()
+    func receivedEventOfShowAlert(title: String, content: String)
 }
 
-class PokemonListPresenter: PokemonListPresenterSpec {
+
+class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where AnyFetchShoesUseCase: FetchDataUseCaseSpec, AnyFetchShoesUseCase.DataModel == [PokemonModel] {
     
-    var rowOfList: Int {return pokemon.count}
-    var isNowLoading = false
-    
-    init(router: PokemonListRouter) {
-        
+    init(fetchPokemonUseCase: AnyFetchShoesUseCase,
+         router: PokemonListRouter) {
+        self.fetchPokemonUseCase = fetchPokemonUseCase
         self.router = router
+        
     }
+    
+    weak var eventReceiver: PokemonListViewEventReceiverable?
+    var rowOfList: Int {return pokemons.count}
+    var isNowLoading = false
     
     func updateList() {
         isNowLoading = false
@@ -36,24 +43,35 @@ class PokemonListPresenter: PokemonListPresenterSpec {
     }
     
     func getCellModel(by row: Int) -> PokemonListCellModel {
-        let thePokemon = pokemon[row]
-        return PokemonListCellModel(image: thePokemon.imageName, name: thePokemon.name)
+        let thePokemon = pokemons[row]
+        return PokemonListCellModel(image: thePokemon.sprites.front_default, name: "\(thePokemon.id)) \(thePokemon.name)")
     }
     
     func didSelect(at row: Int) {
-        let thePokemon = pokemon[row]
-        // TODO: vc.performSegue(withIdentifier: K.listToDetailSegue, sender: ????)
+        let thePokemon = pokemons[row]
         router.pushDetailView(with: thePokemon)
     }
     
     // MARK: Private
-    private var pokemon: [PokemonModel] = []
-    private let router: PokemonListRouter
     
-    // TODO: fetchPokemonData
+    private var pokemons: [PokemonModel] = []
+    private let router: PokemonListRouter
+    private let fetchPokemonUseCase: AnyFetchShoesUseCase
+    
     private func fetchPokemon() {
-        for i in 1...30 {
-            pokemon += [PokemonModel(name: "pok\(i)")]
+        fetchPokemonUseCase.fetchDataModel { [weak self] (result) in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let pokemons):
+                print("success")
+                self.pokemons += pokemons
+                self.eventReceiver?.receivedEventOfRefreshList()
+            case .failure:
+                print("fail")
+                self.eventReceiver?.receivedEventOfShowAlert(title: "Fail", content: "An error occurred, please try again later.")
+                
+            }
         }
     }
 }

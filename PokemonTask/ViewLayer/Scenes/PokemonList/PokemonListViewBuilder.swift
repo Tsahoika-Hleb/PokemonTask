@@ -11,11 +11,12 @@ struct PokemonListViewBuilder: ViewBuilderSpec {
     
     func build() -> PokemonListViewController {
         
-        //let vc = UIStoryboard.instantiateViewController()
-        //let vc = UIStoryboard.main.instantiateViewController(withClass: PokemonListViewController.self)
+        let remoteRepository = RemotePokemonRepository(fetcher: PokemonListFetcher())
+        let fetchPokemonUseCase = FetchPokemonListUseCase(repository: remoteRepository)
         let vc = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: K.pokemonListViewControllerID) as! PokemonListViewController
-        vc.presenter = PokemonListPresenter(router: PokemonListRouter(performer: vc))
-        //vc.presenter.eventReceiver = vc  // TODO: add functionality
+        vc.presenter = PokemonListPresenter(fetchPokemonUseCase: fetchPokemonUseCase, router: PokemonListRouter(performer: vc))
+        vc.presenter.eventReceiver = vc
+        
         return vc
     }
     

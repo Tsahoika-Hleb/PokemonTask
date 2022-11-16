@@ -13,4 +13,6 @@ struct K {
     
     static let pokemonListTableViewCellID = "pokemonlistcellid"
     static let loadingTableViewCellID = "loadingcellid"
+    
+    static let apiURL = "https://pokeapi.co/api/v2/pokemon"
 }

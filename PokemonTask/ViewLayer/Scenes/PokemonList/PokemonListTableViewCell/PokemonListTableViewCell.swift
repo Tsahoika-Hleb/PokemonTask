@@ -8,7 +8,7 @@
 import UIKit
 
 struct PokemonListCellModel {
-    let image: String //TODO: Change??
+    let image: String
     let name: String
 }
 

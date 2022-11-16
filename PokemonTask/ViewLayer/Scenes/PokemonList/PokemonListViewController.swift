@@ -10,7 +10,7 @@ import UIKit
 class PokemonListViewController: BaseViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    var presenter: PokemonListPresenter!
+    var presenter: PokemonListPresenterSpec!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +19,20 @@ class PokemonListViewController: BaseViewController {
     }
     
     // MARK: private
+    private enum State {
+        case initial
+        case showList
+    }
     
+    private var state: State = .initial {
+        didSet {
+            switch state {
+            case .initial: break
+            case .showList: tableView.reloadData()
+            }
+        }
+    }
+        
     private func setupTableView() {
         
         tableView.dataSource = self
@@ -30,10 +43,21 @@ class PokemonListViewController: BaseViewController {
         tableView.register(UINib(nibName: "PokemonListTableViewCell", bundle: nil), forCellReuseIdentifier: K.pokemonListTableViewCellID)
         tableView.register(UINib(nibName: "LoadingTableViewCell", bundle: nil), forCellReuseIdentifier: K.loadingTableViewCellID)
     }
-
+    
 }
 
-
+extension PokemonListViewController: PokemonListViewEventReceiverable {
+    func receivedEventOfRefreshList() {
+        state = .showList
+    }
+    
+    func receivedEventOfShowAlert(title: String, content: String) {
+        let alert = UIAlertController(title: title, message: content, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+}
 // MARK: - UITableViewDataSource & UITableViewDelegate
 
 extension PokemonListViewController: UITableViewDataSource {
@@ -56,6 +80,7 @@ extension PokemonListViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: K.pokemonListTableViewCellID, for: indexPath) as! PokemonListTableViewCell
             let viewModel = presenter.getCellModel(by: indexPath.row)
             cell.nameLabel.text = viewModel.name
+            //cell.pokemonImage =
             //cell.pokemonImage = UIImageView(image: UIImage(named: "pikachu"))
             return cell
         } else {
