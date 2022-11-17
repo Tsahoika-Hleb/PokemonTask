@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FC14B57B29268B290034EFE6 /* ImagaDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC14B57A29268B290034EFE6 /* ImagaDataManager.swift */; };
+		FC14B580292697260034EFE6 /* ImageServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC14B57F292697260034EFE6 /* ImageServiceManager.swift */; };
 		FC211F7829246FA8005F288F /* FetchPokemonListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC211F7729246FA8005F288F /* FetchPokemonListUseCase.swift */; };
 		FCB16A0F292254F300192135 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB16A0E292254F300192135 /* AppDelegate.swift */; };
 		FCB16A13292254F300192135 /* PokemonDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB16A12292254F300192135 /* PokemonDetailViewController.swift */; };
@@ -33,7 +35,6 @@
 		FCB16A772923285500192135 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB16A752923285500192135 /* LoadingTableViewCell.swift */; };
 		FCB16A782923285500192135 /* LoadingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FCB16A762923285500192135 /* LoadingTableViewCell.xib */; };
 		FCB16A7D292350F100192135 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB16A7C292350F100192135 /* SceneDelegate.swift */; };
-		FCB4981B29248493009967EE /* RemotePokemonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB4981A29248493009967EE /* RemotePokemonModel.swift */; };
 		FCB4981F29254DD8009967EE /* NetworkServiceManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB4981E29254DD8009967EE /* NetworkServiceManger.swift */; };
 		FCB4982229255352009967EE /* PokemonApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB4982129255352009967EE /* PokemonApiManager.swift */; };
 		FCB4982429256316009967EE /* PokemonRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB4982329256316009967EE /* PokemonRepositorySpec.swift */; };
@@ -62,6 +63,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FC14B57A29268B290034EFE6 /* ImagaDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagaDataManager.swift; sourceTree = "<group>"; };
+		FC14B57F292697260034EFE6 /* ImageServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageServiceManager.swift; sourceTree = "<group>"; };
 		FC211F7729246FA8005F288F /* FetchPokemonListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPokemonListUseCase.swift; sourceTree = "<group>"; };
 		FCB16A0B292254F300192135 /* PokemonTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokemonTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCB16A0E292254F300192135 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -92,7 +95,6 @@
 		FCB16A752923285500192135 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		FCB16A762923285500192135 /* LoadingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingTableViewCell.xib; sourceTree = "<group>"; };
 		FCB16A7C292350F100192135 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		FCB4981A29248493009967EE /* RemotePokemonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePokemonModel.swift; sourceTree = "<group>"; };
 		FCB4981E29254DD8009967EE /* NetworkServiceManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceManger.swift; sourceTree = "<group>"; };
 		FCB4982129255352009967EE /* PokemonApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonApiManager.swift; sourceTree = "<group>"; };
 		FCB4982329256316009967EE /* PokemonRepositorySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonRepositorySpec.swift; sourceTree = "<group>"; };
@@ -128,10 +130,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FC14B57929268AF90034EFE6 /* ImageDataFetcher */ = {
+			isa = PBXGroup;
+			children = (
+				FC14B57A29268B290034EFE6 /* ImagaDataManager.swift */,
+				FC14B57F292697260034EFE6 /* ImageServiceManager.swift */,
+			);
+			path = ImageDataFetcher;
+			sourceTree = "<group>";
+		};
+		FC14B57C29268E410034EFE6 /* DataModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = DataModels;
+			sourceTree = "<group>";
+		};
 		FC211F6D2924607F005F288F /* DataLayer */ = {
 			isa = PBXGroup;
 			children = (
-				FC211F7B29247E58005F288F /* DataModel */,
+				FC14B57C29268E410034EFE6 /* DataModels */,
 				FC211F702924621B005F288F /* Repositories */,
 			);
 			path = DataLayer;
@@ -160,14 +178,6 @@
 				FCB4982529256435009967EE /* FetchDataUseCaseSpec.swift */,
 			);
 			path = UseCases;
-			sourceTree = "<group>";
-		};
-		FC211F7B29247E58005F288F /* DataModel */ = {
-			isa = PBXGroup;
-			children = (
-				FCB4981A29248493009967EE /* RemotePokemonModel.swift */,
-			);
-			path = DataModel;
 			sourceTree = "<group>";
 		};
 		FCB16A02292254F300192135 = {
@@ -334,8 +344,9 @@
 				FCB4982929257CDA009967EE /* NetworkFetchable.swift */,
 				FCB4981E29254DD8009967EE /* NetworkServiceManger.swift */,
 				FCB4982729257C6F009967EE /* RemotePokemonsRepository.swift */,
-				FC211F712924673A005F288F /* Api */,
 				FCB4982B29257F4D009967EE /* PokemonListFetcher.swift */,
+				FC211F712924673A005F288F /* Api */,
+				FC14B57929268AF90034EFE6 /* ImageDataFetcher */,
 			);
 			path = Remote;
 			sourceTree = "<group>";
@@ -483,13 +494,13 @@
 				FCB4982429256316009967EE /* PokemonRepositorySpec.swift in Sources */,
 				FCB4982829257C6F009967EE /* RemotePokemonsRepository.swift in Sources */,
 				FCB16A5D292292D900192135 /* ViewBuilderSpec.swift in Sources */,
-				FCB4981B29248493009967EE /* RemotePokemonModel.swift in Sources */,
 				FCB16A772923285500192135 /* LoadingTableViewCell.swift in Sources */,
 				FCB16A6F29231F1200192135 /* PokemonListTableViewCell.swift in Sources */,
 				FCB16A5329226DCB00192135 /* PokemonDetailViewBuilder.swift in Sources */,
 				FCB16A4229225B2D00192135 /* Constants.swift in Sources */,
 				FCB16A5529226EEF00192135 /* PokemonDetailPresenter.swift in Sources */,
 				FCB16A19292254F300192135 /* PokemonTask.xcdatamodeld in Sources */,
+				FC14B580292697260034EFE6 /* ImageServiceManager.swift in Sources */,
 				FCB4982C29257F4D009967EE /* PokemonListFetcher.swift in Sources */,
 				FCB16A7D292350F100192135 /* SceneDelegate.swift in Sources */,
 				FCB4982629256435009967EE /* FetchDataUseCaseSpec.swift in Sources */,
@@ -500,6 +511,7 @@
 				FCB16A4B2922646700192135 /* PokemonListPresenter.swift in Sources */,
 				FCB4982229255352009967EE /* PokemonApiManager.swift in Sources */,
 				FCB16A5B29228D0C00192135 /* PokemonListViewBuilder.swift in Sources */,
+				FC14B57B29268B290034EFE6 /* ImagaDataManager.swift in Sources */,
 				FCB16A0F292254F300192135 /* AppDelegate.swift in Sources */,
 				FCB16A492922622C00192135 /* PokemonListViewController.swift in Sources */,
 				FC211F7829246FA8005F288F /* FetchPokemonListUseCase.swift in Sources */,

@@ -44,7 +44,7 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
     
     func getCellModel(by row: Int) -> PokemonListCellModel {
         let thePokemon = pokemons[row]
-        return PokemonListCellModel(image: thePokemon.sprites.front_default, name: "\(thePokemon.id)) \(thePokemon.name)")
+        return PokemonListCellModel(imageData: thePokemon.frontDefault!, name: "\(thePokemon.id)) \(thePokemon.name)")
     }
     
     func didSelect(at row: Int) {
@@ -59,6 +59,7 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
     private let fetchPokemonUseCase: AnyFetchShoesUseCase
     
     private func fetchPokemon() {
+        print("try to fetch")
         fetchPokemonUseCase.fetchDataModel { [weak self] (result) in
             guard let self = self else { return }
             
@@ -68,7 +69,8 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
                 self.pokemons += pokemons
                 self.eventReceiver?.receivedEventOfRefreshList()
             case .failure:
-                print("fail")
+                print("fail---------------")
+                
                 self.eventReceiver?.receivedEventOfShowAlert(title: "Fail", content: "An error occurred, please try again later.")
                 
             }

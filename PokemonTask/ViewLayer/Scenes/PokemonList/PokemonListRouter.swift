@@ -18,7 +18,6 @@ struct PokemonListRouter: PokemonListRouterSpec {
     }
     
     func pushDetailView(with pokemon: PokemonModel) {
-        // TODO: CHECK
         let vc = PokemonDetailViewBuilder(pokemon: pokemon).build()
         performer.navigationController?.pushViewController(vc, animated: true)
     }

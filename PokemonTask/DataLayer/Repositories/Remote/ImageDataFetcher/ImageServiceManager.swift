@@ -1,16 +1,16 @@
 //
-//  ApiManager.swift
+//  ImageServiceManager.swift
 //  PokemonTask
 //
-//  Created by Hleb Tsahoika on 16.11.22.
+//  Created by Hleb Tsahoika on 17.11.22.
 //
 
 import Foundation
 
-class NetworkServiceManger {
-    public static let shared = NetworkServiceManger()
+class ImageServiceManger {
+    public static let shared = ImageServiceManger()
     
-    func callNetworkService<T: Decodable>(urlString: String, success: @escaping ((T) -> Void), fail: @escaping (() -> Void)) {
+    func callImageService(urlString: String, success: @escaping ((Data) -> Void), fail: @escaping (() -> Void)) {
         let url = URL(string: urlString)
         guard let urlObj = url else { return }
         let session = URLSession.shared
@@ -23,13 +23,8 @@ class NetworkServiceManger {
             
             guard error == nil else { return }
             guard let safeData = data else { return }
-            let decoder = JSONDecoder()
-            if let jsonData = try? decoder.decode(T.self, from: safeData) {
-                success(jsonData)
-            } else {
-                print("encode error")
-                fail()
-            }
+            success(safeData)
+
         })
         task.resume()
     }

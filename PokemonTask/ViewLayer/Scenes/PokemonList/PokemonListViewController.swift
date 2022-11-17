@@ -82,7 +82,8 @@ extension PokemonListViewController: UITableViewDataSource {
             let viewModel = presenter.getCellModel(by: indexPath.row)
             cell.nameLabel.text = viewModel.name
             //cell.pokemonImage = UIImageView(image: UIImage(named: "pikachu"))
-            cell.pokemonImage.sd_setImage(with: URL(string: viewModel.image)) // TODO: CHANGE
+            //cell.pokemonImage.sd_setImage(with: URL(string: viewModel.image)) // TODO: CHANGE
+            cell.pokemonImage.image = UIImage(data: viewModel.imageData)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: K.loadingTableViewCellID, for: indexPath) as! LoadingTableViewCell
@@ -114,6 +115,7 @@ extension PokemonListViewController: UITableViewDelegate {
         if indexPath.row == presenter.rowOfList - 10, !presenter.isNowLoading {
             presenter.updateList()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                print("reload")
                 self.tableView.reloadData()
             }
         }

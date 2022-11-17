@@ -14,10 +14,13 @@ struct RemotePokemonRepository<AnyNetworkFetchable>: PokemonRepositorySpec where
     }
     
     func fetchPokemonList(_ completionHandler: @escaping FetchPokemonsCompletionHandler) {
+        var res: [PokemonModel] = []
+        
         fetcher.fire { (result) in
             switch result {
             case .success(let dataModel):
-                completionHandler(Result.success(dataModel.sorted { $0.id < $1.id }))
+                res = dataModel.sorted { $0.id < $1.id }
+                completionHandler(Result.success(res))
             case .failure(let error):
                 completionHandler(Result.failure(error))
             }
