@@ -38,7 +38,7 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
     var isNowLoading = false
     
     func updateList() {
-        isNowLoading = false
+        isNowLoading = true
         fetchPokemon()
     }
     
@@ -68,6 +68,7 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
                 print("success")
                 self.pokemons += pokemons
                 self.eventReceiver?.receivedEventOfRefreshList()
+                self.isNowLoading = false
             case .failure:
                 print("fail---------------")
                 

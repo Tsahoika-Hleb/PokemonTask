@@ -31,7 +31,25 @@ class PokemonDetailViewController: UIViewController {
         informationView.layer.cornerRadius = 15
         informationView.layer.masksToBounds = true
         
+        presenter.setup()
         // Do any additional setup after loading the view.
     }
+    
 }
+
+// MARK: PokemonDetailViewEventReceiverable
+
+extension PokemonDetailViewController: PokemonDetailViewEventReceiverable {
+    
+    func receivedEventOfSetupViews(with setupModel: PokemonDetailViewSetupModel) {
+        nameLabel.text = setupModel.name.capitalized
+        heightLabel.text = "\(setupModel.height)cm"
+        weightLabel.text = "\(setupModel.weight)kg"
+        typeLabel.text = String(setupModel.types.joined(separator: " ").capitalized)
+        topImageView.image = UIImage(data: setupModel.topImage)
+        bottomImageView.image = UIImage(data: setupModel.botImage)
+        
+    }
+}
+
 

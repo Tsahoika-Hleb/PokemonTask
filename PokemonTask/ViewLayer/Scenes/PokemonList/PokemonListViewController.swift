@@ -113,9 +113,9 @@ extension PokemonListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         if indexPath.row == presenter.rowOfList - 10, !presenter.isNowLoading {
+            print("==========WILL DISPLAY===========")
             presenter.updateList()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                print("reload")
                 self.tableView.reloadData()
             }
         }

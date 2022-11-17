@@ -16,6 +16,7 @@ struct PokemonDetailViewBuilder {
     func build() -> PokemonDetailViewController {
         let vc = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: K.pokemonDetailViewControllerID) as! PokemonDetailViewController
         vc.presenter = PokemonDetailPresenter(pokemon: pokemon)
+        vc.presenter.eventReceiver = vc
         return vc
     }
     
