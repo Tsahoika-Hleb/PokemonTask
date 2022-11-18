@@ -9,7 +9,7 @@ import Foundation
 
 class PokemonApiManager {
     public static let shared = PokemonApiManager()
-    var currentOffset = 0
+    //var currentOffset = 0
     
     func fetchPokemon(id: Int, success: @escaping ((PokemonModel) -> Void), fail: @escaping (() -> Void)) {
         NetworkServiceManger.shared.callNetworkService(urlString: "\(K.apiURLs.apiURL)/\(id)/") { (response: PokemonModel) in

@@ -13,6 +13,7 @@ protocol PokemonListPresenterSpec {
     var rowOfList: Int { get }
     var isNowLoading: Bool { get set }
     
+    func setup()
     func updateList()
     func didSelect(at row: Int)
     func getCellModel(by row: Int) -> PokemonListCellModel
@@ -27,8 +28,10 @@ protocol PokemonListViewEventReceiverable: AnyObject {
 class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where AnyFetchShoesUseCase: FetchDataUseCaseSpec, AnyFetchShoesUseCase.DataModel == [PokemonModel] {
     
     init(fetchPokemonUseCase: AnyFetchShoesUseCase,
+         fetchLocalPokemonUseCaseSpec: AnyFetchShoesUseCase,
          router: PokemonListRouter) {
         self.fetchPokemonUseCase = fetchPokemonUseCase
+        self.fetchLocalPokemonUseCaseSpec = fetchLocalPokemonUseCaseSpec
         self.router = router
         
     }
@@ -36,6 +39,10 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
     weak var eventReceiver: PokemonListViewEventReceiverable?
     var rowOfList: Int {return pokemons.count}
     var isNowLoading = false
+    
+    func setup() {
+        fetchLocalPokemonList()
+    }
     
     func updateList() {
         isNowLoading = true
@@ -57,6 +64,29 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
     private var pokemons: [PokemonModel] = []
     private let router: PokemonListRouter
     private let fetchPokemonUseCase: AnyFetchShoesUseCase
+    private let fetchLocalPokemonUseCaseSpec: AnyFetchShoesUseCase
+    
+    
+    private func fetchLocalPokemonList() {
+        
+        print("fetchLoaclShoes()")
+        
+        fetchLocalPokemonUseCaseSpec.fetchDataModel { [weak self] (result) in
+            guard let self = self else { return }
+            switch result {
+            case .success(let pokemons):
+                self.pokemons = pokemons
+                self.eventReceiver?.receivedEventOfRefreshList()
+            case .failure:
+                //K.currentOffset += K.pokemonRequestLimit
+                print("fail to download from cache")
+                self.updateList()
+                break
+            }
+            K.currentOffset = self.pokemons.count
+        }
+    }
+
     
     private func fetchPokemon() {
         print("try to fetch")

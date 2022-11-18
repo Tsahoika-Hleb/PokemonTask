@@ -9,6 +9,7 @@ import Foundation
 
 struct K {
     static let pokemonRequestLimit = 25
+    static var currentOffset = 0
     
     static let pokemonDetailViewControllerID = "PokemonDetailViewController"
     static let pokemonListViewControllerID = "PokemonListViewController"
@@ -16,6 +17,8 @@ struct K {
     static let pokemonListTableViewCellID = "pokemonlistcellid"
     static let loadingTableViewCellID = "loadingcellid"
     
+    static let localPokemonListPersistKey = "localPokemonListPersistKey"
+
     struct apiURLs {
         static let apiURL = "https://pokeapi.co/api/v2/pokemon"
         static let frontDefaultURL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"

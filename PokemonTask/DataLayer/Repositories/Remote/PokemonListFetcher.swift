@@ -20,29 +20,25 @@ struct PokemonListFetcher: NetworkFetchable {
         
         for id in 1...K.pokemonRequestLimit {
             DispatchQueue.global().sync {
-                PokemonApiManager.shared.fetchPokemon(id: id + PokemonApiManager.shared.currentOffset) { (response) in
+                PokemonApiManager.shared.fetchPokemon(id: id + K.currentOffset) { (response) in
                     pokemonModelArray.append(response)
-                    print("\(response.name) \(response.id)")
                 } fail: {
                     print("Fail")
                     completionHandler(Result.failure(NetworkError.decode))
                 }
-                ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.frontDefaultURL)\(id + PokemonApiManager.shared.currentOffset).png") { (response) in
+                ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.frontDefaultURL)\(id + K.currentOffset).png") { (response) in
                     fdsArray.append((response, id))
-                    print("FD|\(id)|\(response)")
                 } fail: {
                     print("Fail download fd")
                     completionHandler(Result.failure(NetworkError.decode))
                 }
-                ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.homeFrontDefaultURl)\(id + PokemonApiManager.shared.currentOffset).png") { (response) in
-                    print("HFD|\(id)|\(response)")
+                ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.homeFrontDefaultURl)\(id + K.currentOffset).png") { (response) in
                     hfdsArray.append((response, id))
                 } fail: {
                     print("Fail download hfd")
                     completionHandler(Result.failure(NetworkError.decode))
                 }
-                ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.offArtFrontDefaultURL)\(id + PokemonApiManager.shared.currentOffset).png") { (response) in
-                    print("OAFD|\(id)|\(response)")
+                ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.offArtFrontDefaultURL)\(id + K.currentOffset).png") { (response) in
                     oafdsArray.append((response, id))
                 } fail: {
                     print("Fail download oafd")
@@ -50,7 +46,6 @@ struct PokemonListFetcher: NetworkFetchable {
                 }
             }
         }
-        PokemonApiManager.shared.currentOffset += K.pokemonRequestLimit
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
             pokemonModelArray = pokemonModelArray.sorted{$0.id < $1.id}

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		FC14B57B29268B290034EFE6 /* ImagaDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC14B57A29268B290034EFE6 /* ImagaDataManager.swift */; };
 		FC14B580292697260034EFE6 /* ImageServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC14B57F292697260034EFE6 /* ImageServiceManager.swift */; };
+		FC14B5832926E16D0034EFE6 /* LocalPokemonRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC14B5822926E16D0034EFE6 /* LocalPokemonRepository.swift */; };
+		FC14B58A2926EB7B0034EFE6 /* CachePokemonRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC14B5892926EB7B0034EFE6 /* CachePokemonRepository.swift */; };
 		FC211F7829246FA8005F288F /* FetchPokemonListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC211F7729246FA8005F288F /* FetchPokemonListUseCase.swift */; };
 		FCB16A0F292254F300192135 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB16A0E292254F300192135 /* AppDelegate.swift */; };
 		FCB16A13292254F300192135 /* PokemonDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB16A12292254F300192135 /* PokemonDetailViewController.swift */; };
@@ -65,6 +67,8 @@
 /* Begin PBXFileReference section */
 		FC14B57A29268B290034EFE6 /* ImagaDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagaDataManager.swift; sourceTree = "<group>"; };
 		FC14B57F292697260034EFE6 /* ImageServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageServiceManager.swift; sourceTree = "<group>"; };
+		FC14B5822926E16D0034EFE6 /* LocalPokemonRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalPokemonRepository.swift; sourceTree = "<group>"; };
+		FC14B5892926EB7B0034EFE6 /* CachePokemonRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachePokemonRepository.swift; sourceTree = "<group>"; };
 		FC211F7729246FA8005F288F /* FetchPokemonListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPokemonListUseCase.swift; sourceTree = "<group>"; };
 		FCB16A0B292254F300192135 /* PokemonTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokemonTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCB16A0E292254F300192135 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -146,6 +150,22 @@
 			path = DataModels;
 			sourceTree = "<group>";
 		};
+		FC14B5812926E1460034EFE6 /* Local */ = {
+			isa = PBXGroup;
+			children = (
+				FC14B5822926E16D0034EFE6 /* LocalPokemonRepository.swift */,
+			);
+			path = Local;
+			sourceTree = "<group>";
+		};
+		FC14B5882926EB520034EFE6 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				FC14B5892926EB7B0034EFE6 /* CachePokemonRepository.swift */,
+			);
+			path = Cache;
+			sourceTree = "<group>";
+		};
 		FC211F6D2924607F005F288F /* DataLayer */ = {
 			isa = PBXGroup;
 			children = (
@@ -158,6 +178,8 @@
 		FC211F702924621B005F288F /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				FC14B5882926EB520034EFE6 /* Cache */,
+				FC14B5812926E1460034EFE6 /* Local */,
 				FCB4982029255317009967EE /* Remote */,
 			);
 			path = Repositories;
@@ -166,6 +188,7 @@
 		FC211F712924673A005F288F /* Api */ = {
 			isa = PBXGroup;
 			children = (
+				FCB4981E29254DD8009967EE /* NetworkServiceManger.swift */,
 				FCB4982129255352009967EE /* PokemonApiManager.swift */,
 			);
 			path = Api;
@@ -341,9 +364,8 @@
 		FCB4982029255317009967EE /* Remote */ = {
 			isa = PBXGroup;
 			children = (
-				FCB4982929257CDA009967EE /* NetworkFetchable.swift */,
-				FCB4981E29254DD8009967EE /* NetworkServiceManger.swift */,
 				FCB4982729257C6F009967EE /* RemotePokemonsRepository.swift */,
+				FCB4982929257CDA009967EE /* NetworkFetchable.swift */,
 				FCB4982B29257F4D009967EE /* PokemonListFetcher.swift */,
 				FC211F712924673A005F288F /* Api */,
 				FC14B57929268AF90034EFE6 /* ImageDataFetcher */,
@@ -495,6 +517,7 @@
 				FCB4982829257C6F009967EE /* RemotePokemonsRepository.swift in Sources */,
 				FCB16A5D292292D900192135 /* ViewBuilderSpec.swift in Sources */,
 				FCB16A772923285500192135 /* LoadingTableViewCell.swift in Sources */,
+				FC14B58A2926EB7B0034EFE6 /* CachePokemonRepository.swift in Sources */,
 				FCB16A6F29231F1200192135 /* PokemonListTableViewCell.swift in Sources */,
 				FCB16A5329226DCB00192135 /* PokemonDetailViewBuilder.swift in Sources */,
 				FCB16A4229225B2D00192135 /* Constants.swift in Sources */,
@@ -513,6 +536,7 @@
 				FCB16A5B29228D0C00192135 /* PokemonListViewBuilder.swift in Sources */,
 				FC14B57B29268B290034EFE6 /* ImagaDataManager.swift in Sources */,
 				FCB16A0F292254F300192135 /* AppDelegate.swift in Sources */,
+				FC14B5832926E16D0034EFE6 /* LocalPokemonRepository.swift in Sources */,
 				FCB16A492922622C00192135 /* PokemonListViewController.swift in Sources */,
 				FC211F7829246FA8005F288F /* FetchPokemonListUseCase.swift in Sources */,
 				FCB4981F29254DD8009967EE /* NetworkServiceManger.swift in Sources */,

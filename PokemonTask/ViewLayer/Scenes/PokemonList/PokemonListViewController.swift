@@ -15,7 +15,7 @@ class PokemonListViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter.updateList()
+        presenter.setup()
         setupTableView()
     }
     
