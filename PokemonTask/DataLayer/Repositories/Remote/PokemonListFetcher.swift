@@ -43,7 +43,7 @@ struct PokemonListFetcher: NetworkFetchable {
             
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {  // TODO: Ask
+        DispatchQueue.main.asyncAfter(deadline: .now() + 25) {  // TODO: Ask
             if !pokemonModelArray.isEmpty, fdsArray.count == pokemonModelArray.count,
                 hfdsArray.count == pokemonModelArray.count, oafdsArray.count == pokemonModelArray.count {
                 pokemonModelArray = pokemonModelArray.sorted{$0.id < $1.id}
