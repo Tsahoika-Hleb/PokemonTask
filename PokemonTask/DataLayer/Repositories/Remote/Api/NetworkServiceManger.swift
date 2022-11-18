@@ -20,14 +20,14 @@ class NetworkServiceManger {
     
         let task: URLSessionDataTask = session.dataTask(with: request as URLRequest, completionHandler: {
             data, response, error in
-            
-            guard error == nil else { return }
-            guard let safeData = data else { return }
+            guard error == nil else {
+                return }
+            guard let safeData = data else {
+                return }
             let decoder = JSONDecoder()
             if let jsonData = try? decoder.decode(T.self, from: safeData) {
                 success(jsonData)
             } else {
-                print("encode error")
                 fail()
             }
         })

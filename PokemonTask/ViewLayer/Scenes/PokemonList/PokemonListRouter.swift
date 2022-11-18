@@ -17,6 +17,7 @@ struct PokemonListRouter: PokemonListRouterSpec {
         self.performer = performer
     }
     
+    // calls PokemonDetailViewBuilder
     func pushDetailView(with pokemon: PokemonModel) {
         let vc = PokemonDetailViewBuilder(pokemon: pokemon).build()
         performer.navigationController?.pushViewController(vc, animated: true)

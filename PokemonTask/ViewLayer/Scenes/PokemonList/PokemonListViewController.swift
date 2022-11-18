@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SDWebImage
 
 class PokemonListViewController: BaseViewController {
     
@@ -19,7 +18,9 @@ class PokemonListViewController: BaseViewController {
         setupTableView()
     }
     
+    
     // MARK: private
+    
     private enum State {
         case initial
         case showList
@@ -59,6 +60,7 @@ extension PokemonListViewController: PokemonListViewEventReceiverable {
     }
     
 }
+
 // MARK: - UITableViewDataSource & UITableViewDelegate
 
 extension PokemonListViewController: UITableViewDataSource {
@@ -81,8 +83,6 @@ extension PokemonListViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: K.pokemonListTableViewCellID, for: indexPath) as! PokemonListTableViewCell
             let viewModel = presenter.getCellModel(by: indexPath.row)
             cell.nameLabel.text = viewModel.name
-            //cell.pokemonImage = UIImageView(image: UIImage(named: "pikachu"))
-            //cell.pokemonImage.sd_setImage(with: URL(string: viewModel.image)) // TODO: CHANGE
             cell.pokemonImage.image = UIImage(data: viewModel.imageData)
             return cell
         } else {
@@ -113,7 +113,6 @@ extension PokemonListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         if indexPath.row == presenter.rowOfList - 10, !presenter.isNowLoading {
-            print("==========WILL DISPLAY===========")
             presenter.updateList()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.tableView.reloadData()

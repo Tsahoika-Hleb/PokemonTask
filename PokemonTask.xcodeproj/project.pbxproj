@@ -359,8 +359,8 @@
 		FCB4982029255317009967EE /* Remote */ = {
 			isa = PBXGroup;
 			children = (
-				FCB4982729257C6F009967EE /* RemotePokemonsRepository.swift */,
 				FCB4982929257CDA009967EE /* NetworkFetchable.swift */,
+				FCB4982729257C6F009967EE /* RemotePokemonsRepository.swift */,
 				FCB4982B29257F4D009967EE /* PokemonListFetcher.swift */,
 				FC211F712924673A005F288F /* Api */,
 				FC14B57929268AF90034EFE6 /* ImageDataFetcher */,

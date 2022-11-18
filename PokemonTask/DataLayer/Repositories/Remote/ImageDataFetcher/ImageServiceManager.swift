@@ -15,7 +15,7 @@ class ImageServiceManger {
         guard let urlObj = url else { return }
         let session = URLSession.shared
         var request = URLRequest(url: urlObj)
-        request.httpMethod = "GET" // TODO: chek by default
+        request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accpet")
     
         let task: URLSessionDataTask = session.dataTask(with: request as URLRequest, completionHandler: {

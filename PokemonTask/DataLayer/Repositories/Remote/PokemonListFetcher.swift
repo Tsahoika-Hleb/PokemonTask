@@ -18,51 +18,50 @@ struct PokemonListFetcher: NetworkFetchable {
         var hfdsArray:  [(Data, Int)] = []
         var oafdsArray:  [(Data, Int)] = []
         
+        // Fetch array of PokemonModel and 3 arrays of each sprite 
         for id in 1...K.pokemonRequestLimit {
-            DispatchQueue.global().sync {
-                PokemonApiManager.shared.fetchPokemon(id: id + K.currentOffset) { (response) in
-                    pokemonModelArray.append(response)
-                } fail: {
-                    print("Fail")
-                    completionHandler(Result.failure(NetworkError.decode))
-                }
-                ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.frontDefaultURL)\(id + K.currentOffset).png") { (response) in
-                    fdsArray.append((response, id))
-                } fail: {
-                    print("Fail download fd")
-                    completionHandler(Result.failure(NetworkError.decode))
-                }
-                ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.homeFrontDefaultURl)\(id + K.currentOffset).png") { (response) in
-                    hfdsArray.append((response, id))
-                } fail: {
-                    print("Fail download hfd")
-                    completionHandler(Result.failure(NetworkError.decode))
-                }
-                ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.offArtFrontDefaultURL)\(id + K.currentOffset).png") { (response) in
-                    oafdsArray.append((response, id))
-                } fail: {
-                    print("Fail download oafd")
-                    completionHandler(Result.failure(NetworkError.decode))
-                }
+            PokemonApiManager.shared.fetchPokemon(id: id + K.currentOffset) { (response) in
+                pokemonModelArray.append(response)
+            } fail: {
+                completionHandler(Result.failure(NetworkError.connection))
             }
+            ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.frontDefaultURL)\(id + K.currentOffset).png") { (response) in
+                fdsArray.append((response, id))
+            } fail: {
+                completionHandler(Result.failure(NetworkError.connection))
+            }
+            ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.homeFrontDefaultURl)\(id + K.currentOffset).png") { (response) in
+                hfdsArray.append((response, id))
+            } fail: {
+                completionHandler(Result.failure(NetworkError.connection))
+            }
+            ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.offArtFrontDefaultURL)\(id + K.currentOffset).png") { (response) in
+                oafdsArray.append((response, id))
+            } fail: {
+                completionHandler(Result.failure(NetworkError.connection))
+            }
+            
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
-            pokemonModelArray = pokemonModelArray.sorted{$0.id < $1.id}
-            fdsArray = fdsArray.sorted {$0.1 < $1.1}
-            hfdsArray = hfdsArray.sorted {$0.1 < $1.1}
-            oafdsArray = oafdsArray.sorted {$0.1 < $1.1}
-            for index in 0..<K.pokemonRequestLimit {
-                pokemonModelArray[index].frontDefault = fdsArray[index].0
-                pokemonModelArray[index].homeFrontDefault = hfdsArray[index].0
-                pokemonModelArray[index].offArtFrontDefault = oafdsArray[index].0
-            }
-            
-            
-            if !pokemonModelArray.isEmpty {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {  // TODO: Ask
+            if !pokemonModelArray.isEmpty, fdsArray.count == pokemonModelArray.count,
+                hfdsArray.count == pokemonModelArray.count, oafdsArray.count == pokemonModelArray.count {
+                pokemonModelArray = pokemonModelArray.sorted{$0.id < $1.id}
+                fdsArray = fdsArray.sorted {$0.1 < $1.1}
+                hfdsArray = hfdsArray.sorted {$0.1 < $1.1}
+                oafdsArray = oafdsArray.sorted {$0.1 < $1.1}
+                for index in 0..<K.pokemonRequestLimit {
+                    pokemonModelArray[index].frontDefault = fdsArray[index].0
+                    pokemonModelArray[index].homeFrontDefault = hfdsArray[index].0
+                    pokemonModelArray[index].offArtFrontDefault = oafdsArray[index].0
+                }
                 completionHandler(Result.success(pokemonModelArray))
             } else {
-                completionHandler(Result.failure(NetworkError.decode))
+                if pokemonModelArray.isEmpty {
+                    completionHandler(Result.failure(NetworkError.connection))
+                } else {
+                    completionHandler(Result.failure(NetworkError.serviceError))
+                }
             }
             
         }

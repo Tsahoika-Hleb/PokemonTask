@@ -17,10 +17,12 @@ struct K {
     static let pokemonListTableViewCellID = "pokemonlistcellid"
     static let loadingTableViewCellID = "loadingcellid"
     
+    /// key for UserDefaults
     static let localPokemonListPersistKey = "localPokemonListPersistKey"
 
     struct apiURLs {
         static let apiURL = "https://pokeapi.co/api/v2/pokemon"
+        
         static let frontDefaultURL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
         static let homeFrontDefaultURl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/"
         static let offArtFrontDefaultURL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/"
