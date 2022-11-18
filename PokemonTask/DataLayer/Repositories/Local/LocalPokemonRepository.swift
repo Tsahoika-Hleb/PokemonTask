@@ -17,19 +17,16 @@ enum LocalPokemonRepositoryError: Error {
     case noLocalCache
 }
 
+/// Cache PokemonModel to userDefaults
 struct LocalPokemonRepository: LocalPokemonRepositorySpec {
     func save(pokemon: [PokemonModel], completionHandler: SavePokemonsComplitionHandler?) {
-        print("SaveCache")
         do {
             var pokemonData = try JSONEncoder().encode(pokemon)
             guard let data = UserDefaults.standard.data(forKey: K.localPokemonListPersistKey) else {
-                print("UD is empty -> set")
                 UserDefaults.standard.set(pokemonData, forKey: K.localPokemonListPersistKey)
                 completionHandler?(Result.success(()))
                 return
             }
-            
-            print("UD has already data")
     
             do {
                 var existingData = try JSONDecoder().decode([PokemonModel].self, from: data)
@@ -40,7 +37,6 @@ struct LocalPokemonRepository: LocalPokemonRepositorySpec {
                 pokemonData = try JSONEncoder().encode(existingData)
                 UserDefaults.standard.set(pokemonData, forKey: K.localPokemonListPersistKey)
             } catch {
-                
                 completionHandler?(Result.failure(error))
             }
             
@@ -52,12 +48,11 @@ struct LocalPokemonRepository: LocalPokemonRepositorySpec {
     }
     
     func fetchPokemonList(_ completionHandler: @escaping FetchPokemonsCompletionHandler) {
-        print("load from local")
+        print("fetch local")
         guard let data = UserDefaults.standard.data(forKey: K.localPokemonListPersistKey) else {
             completionHandler(Result.failure(LocalPokemonRepositoryError.noLocalCache))
             return
         }
-        
         do {
             let dataModel = try JSONDecoder().decode([PokemonModel].self, from: data)
             completionHandler(Result.success(dataModel))

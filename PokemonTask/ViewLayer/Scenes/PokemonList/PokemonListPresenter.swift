@@ -24,7 +24,7 @@ protocol PokemonListViewEventReceiverable: AnyObject {
     func receivedEventOfShowAlert(title: String, content: String)
 }
 
-
+/// Presenter to PokemonListViewController
 class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where AnyFetchShoesUseCase: FetchDataUseCaseSpec, AnyFetchShoesUseCase.DataModel == [PokemonModel] {
     
     init(fetchPokemonUseCase: AnyFetchShoesUseCase,
@@ -59,6 +59,7 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
         router.pushDetailView(with: thePokemon)
     }
     
+    
     // MARK: Private
     
     private var pokemons: [PokemonModel] = []
@@ -66,11 +67,8 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
     private let fetchPokemonUseCase: AnyFetchShoesUseCase
     private let fetchLocalPokemonUseCaseSpec: AnyFetchShoesUseCase
     
-    
+    // Receives [PokemonModel] and Error from Local
     private func fetchLocalPokemonList() {
-        
-        print("fetchLoaclShoes()")
-        
         fetchLocalPokemonUseCaseSpec.fetchDataModel { [weak self] (result) in
             guard let self = self else { return }
             switch result {
@@ -78,31 +76,34 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
                 self.pokemons = pokemons
                 self.eventReceiver?.receivedEventOfRefreshList()
             case .failure:
-                //K.currentOffset += K.pokemonRequestLimit
-                print("fail to download from cache")
                 self.updateList()
                 break
             }
             K.currentOffset = self.pokemons.count
         }
     }
-
     
+    // Receives [PokemonModel] and Error from CacheRepository
     private func fetchPokemon() {
-        print("try to fetch")
         fetchPokemonUseCase.fetchDataModel { [weak self] (result) in
             guard let self = self else { return }
-            
             switch result {
             case .success(let pokemons):
                 print("success")
                 self.pokemons += pokemons
                 self.eventReceiver?.receivedEventOfRefreshList()
                 self.isNowLoading = false
-            case .failure:
-                print("fail---------------")
-                
-                self.eventReceiver?.receivedEventOfShowAlert(title: "Fail", content: "An error occurred, please try again later.")
+            case .failure(let error):
+                if !self.pokemons.isEmpty {
+                    self.isNowLoading = false
+                }
+                if (error as! NetworkError == NetworkError.connection) {
+                    self.eventReceiver?
+                        .receivedEventOfShowAlert(title: "Fail", content: "An error occurred, please please check your internet connection.")
+                } else {
+                    self.eventReceiver?
+                        .receivedEventOfShowAlert(title: "Fail", content: "An data from API loading error occurred, please make sure you have a stable internet connection and try again.")
+                }
                 
             }
         }

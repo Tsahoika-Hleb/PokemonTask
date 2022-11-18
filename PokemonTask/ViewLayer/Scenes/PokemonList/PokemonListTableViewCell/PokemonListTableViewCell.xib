@@ -21,7 +21,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FFm-08-00C">
                         <rect key="frame" x="20" y="4" width="284" height="67"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pikachu" translatesAutoresizingMaskIntoConstraints="NO" id="GTb-Vf-fiR">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GTb-Vf-fiR">
                                 <rect key="frame" x="8" y="8" width="51" height="51"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="51" id="TFe-T2-sw0"/>
@@ -91,7 +91,6 @@
     </objects>
     <resources>
         <image name="info.circle" catalog="system" width="128" height="123"/>
-        <image name="pikachu" width="300" height="316"/>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

@@ -13,16 +13,6 @@ struct FetchPokemonListUseCase: FetchDataUseCaseSpec {
     init(repository: PokemonRepositorySpec) {
         self.repository = repository
     }
-
-//    func temp() {  // TODO: delete
-//        PokemonApiManager.shared.fetchPokemons { PokemonApiListModel in
-//            for i in 0..<20 {
-//                print(PokemonApiListModel.results[i].name)
-//            }
-//        } fail: {
-//            print("Fail")
-//        }
-//    }
     
     func fetchDataModel(_ completionHandler: @escaping FetchDataModelUseCaseCompletionHandler) {
         repository.fetchPokemonList(completionHandler)

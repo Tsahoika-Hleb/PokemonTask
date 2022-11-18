@@ -17,12 +17,13 @@ struct CachePokemonRepository: PokemonRepositorySpec {
     
     func fetchPokemonList(_ completionHandler: @escaping FetchPokemonsCompletionHandler) {
         remoteRepository.fetchPokemonList { (result) in
+            print(result)
             switch result {
             case .success(let dataModel):
                 self.localRepository.save(pokemon: dataModel, completionHandler: nil)
                 completionHandler(result)
-            case .failure(_):
-                self.localRepository.fetchPokemonList(completionHandler)
+            case .failure(let error):
+                completionHandler(Result.failure(error))
             }
         }
     }

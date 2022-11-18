@@ -11,6 +11,7 @@ class ImageDataManager {
     public static let shared = ImageDataManager()
     var curruntOffset = 0
     
+    // Fetch image data by URL
     func fetchImage(url: String, success: @escaping ((Data) -> Void), fail: @escaping (() -> Void)) {
         ImageServiceManger.shared.callImageService(urlString: url) { (response: Data) in
             success(response)

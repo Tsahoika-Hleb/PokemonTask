@@ -13,9 +13,9 @@ struct RemotePokemonRepository<AnyNetworkFetchable>: PokemonRepositorySpec where
         self.fetcher = fetcher
     }
     
+    // calls func fire(_ completionHandler: @escaping (Result<[PokemonModel], NetworkError>) -> ()) in PokemonListFetcher
     func fetchPokemonList(_ completionHandler: @escaping FetchPokemonsCompletionHandler) {
         var res: [PokemonModel] = []
-        print("Load from remote")
         fetcher.fire { (result) in
             switch result {
             case .success(let dataModel):
@@ -23,11 +23,13 @@ struct RemotePokemonRepository<AnyNetworkFetchable>: PokemonRepositorySpec where
                 K.currentOffset += K.pokemonRequestLimit
                 completionHandler(Result.success(res))
             case .failure(let error):
+                print(error.localizedDescription)
                 completionHandler(Result.failure(error))
             }
         }
         
     }
+    
     
     // MARK: private
     

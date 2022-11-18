@@ -26,7 +26,6 @@ class PokemonListTableViewCell: UITableViewCell {
         cellView.layer.cornerRadius = cellView.frame.height / 2
         pokemonImage.layer.cornerRadius = pokemonImage.frame.size.width / 2
         pokemonImage.clipsToBounds = true
-        //self.contentView.backgroundColor = UIColor.clear
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
