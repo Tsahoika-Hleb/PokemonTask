@@ -67,7 +67,7 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
     private let fetchPokemonUseCase: AnyFetchShoesUseCase
     private let fetchLocalPokemonUseCaseSpec: AnyFetchShoesUseCase
     
-    // Receives [PokemonModel] and Error from Local
+    // Receives [PokemonModel] and Error from LocalRepository
     private func fetchLocalPokemonList() {
         fetchLocalPokemonUseCaseSpec.fetchDataModel { [weak self] (result) in
             guard let self = self else { return }
@@ -80,6 +80,7 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
                 break
             }
             K.currentOffset = self.pokemons.count
+            
         }
     }
     
@@ -103,6 +104,9 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
                 } else {
                     self.eventReceiver?
                         .receivedEventOfShowAlert(title: "Fail", content: "An data from API loading error occurred, please make sure you have a stable internet connection and try again.")
+                }
+                if self.pokemons.isEmpty{
+                    self.updateList()
                 }
                 
             }
