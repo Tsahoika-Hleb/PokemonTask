@@ -15,7 +15,9 @@ struct K {
     static let pokemonListViewControllerID = "PokemonListViewController"
     
     static let pokemonListTableViewCellID = "pokemonlistcellid"
+    static let pokemonListCellNibName = "PokemonListTableViewCell"
     static let loadingTableViewCellID = "loadingcellid"
+    static let loadingCellNibName = "LoadingTableViewCell"
     
     /// key for UserDefaults
     static let localPokemonListPersistKey = "localPokemonListPersistKey"

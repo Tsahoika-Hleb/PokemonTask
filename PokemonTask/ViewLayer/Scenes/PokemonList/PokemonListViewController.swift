@@ -21,6 +21,22 @@ class PokemonListViewController: BaseViewController {
     
     // MARK: private
     
+    private enum TableViewOptions: Int {
+        
+        case numberOfSections = 2
+        case cellsToUpdate = 10
+        
+        enum PokemonListCellOptions: Int {
+            case pokemonCellHeight = 75
+            case pokemonCellSectionId = 0
+        }
+        
+        enum LoadingCellOptions: Int {
+            case loadingCellHeight = 55
+            case loadingCellSectionId = 1
+        }
+    }
+
     private enum State {
         case initial
         case showList
@@ -41,9 +57,9 @@ class PokemonListViewController: BaseViewController {
         tableView.delegate = self
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
-        tableView.backgroundColor = UIColor.clear
-        tableView.register(UINib(nibName: "PokemonListTableViewCell", bundle: nil), forCellReuseIdentifier: K.pokemonListTableViewCellID)
-        tableView.register(UINib(nibName: "LoadingTableViewCell", bundle: nil), forCellReuseIdentifier: K.loadingTableViewCellID)
+        tableView.backgroundColor = UIColor.clear  
+        tableView.register(UINib(nibName: K.pokemonListCellNibName, bundle: nil), forCellReuseIdentifier: K.pokemonListTableViewCellID)
+        tableView.register(UINib(nibName: K.loadingCellNibName, bundle: nil), forCellReuseIdentifier: K.loadingTableViewCellID)
     }
     
 }
@@ -65,9 +81,9 @@ extension PokemonListViewController: PokemonListViewEventReceiverable {
 
 extension PokemonListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+        if section == TableViewOptions.PokemonListCellOptions.pokemonCellSectionId.rawValue {
             return presenter.rowOfList
-        } else if section == 1 {
+        } else if section == TableViewOptions.LoadingCellOptions.loadingCellSectionId.rawValue {
             return 1
         } else {
             return 0
@@ -75,11 +91,11 @@ extension PokemonListViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return TableViewOptions.numberOfSections.rawValue
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
+        if indexPath.section == TableViewOptions.PokemonListCellOptions.pokemonCellSectionId.rawValue {
             let cell = tableView.dequeueReusableCell(withIdentifier: K.pokemonListTableViewCellID, for: indexPath) as! PokemonListTableViewCell
             let viewModel = presenter.getCellModel(by: indexPath.row)
             cell.nameLabel.text = viewModel.name
@@ -103,16 +119,16 @@ extension PokemonListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 75
+        if indexPath.section == TableViewOptions.PokemonListCellOptions.pokemonCellSectionId.rawValue {
+            return CGFloat(TableViewOptions.PokemonListCellOptions.pokemonCellHeight.rawValue)
         } else {
-            return 55
+            return CGFloat(TableViewOptions.LoadingCellOptions.loadingCellHeight.rawValue)
         }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        if indexPath.row == presenter.rowOfList - 10, !presenter.isNowLoading {
+        if indexPath.row == presenter.rowOfList - TableViewOptions.cellsToUpdate.rawValue, !presenter.isNowLoading {
             presenter.updateList()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.tableView.reloadData()

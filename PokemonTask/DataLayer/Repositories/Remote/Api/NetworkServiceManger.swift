@@ -7,8 +7,14 @@
 
 import Foundation
 
+protocol NetworkServiceManagerDelegate {
+    
+}
+
 class NetworkServiceManger {
     public static let shared = NetworkServiceManger()
+    
+    //var delegate: NetworkServiceManagerDelegate?
     
     func callNetworkService<T: Decodable>(urlString: String, success: @escaping ((T) -> Void), fail: @escaping (() -> Void)) {
         let url = URL(string: urlString)
