@@ -8,7 +8,7 @@
 import Foundation
 
 struct K {
-    static let pokemonRequestLimit = 25
+    static let pokemonRequestLimit = 15
     static var currentOffset = 0
     
     static let pokemonDetailViewControllerID = "PokemonDetailViewController"

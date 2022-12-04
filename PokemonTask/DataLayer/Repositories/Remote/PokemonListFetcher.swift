@@ -18,54 +18,58 @@ struct PokemonListFetcher: NetworkFetchable {
         var hfdsArray:  [(Data, Int)] = []
         var oafdsArray:  [(Data, Int)] = []
         
-        // Fetch array of PokemonModel and 3 arrays of each sprite 
+        let group = DispatchGroup()
+        
+        let start = CFAbsoluteTimeGetCurrent()
+        
+        // Fetch array of PokemonModel and 3 arrays of each sprite
         for id in 1...K.pokemonRequestLimit {
+            group.enter()
             PokemonApiManager.shared.fetchPokemon(id: id + K.currentOffset) { (response) in
                 pokemonModelArray.append(response)
+                group.leave()
             } fail: {
-                completionHandler(Result.failure(NetworkError.connection))
+                DispatchQueue.main.async {
+                    completionHandler(Result.failure(NetworkError.connection))
+                }
             }
+            group.enter()
             ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.frontDefaultURL)\(id + K.currentOffset).png") { (response) in
                 fdsArray.append((response, id))
+                group.leave()
             } fail: {
                 completionHandler(Result.failure(NetworkError.connection))
             }
+            group.enter()
             ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.homeFrontDefaultURl)\(id + K.currentOffset).png") { (response) in
                 hfdsArray.append((response, id))
+                group.leave()
             } fail: {
                 completionHandler(Result.failure(NetworkError.connection))
             }
+            group.enter()
             ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.offArtFrontDefaultURL)\(id + K.currentOffset).png") { (response) in
                 oafdsArray.append((response, id))
+                group.leave()
             } fail: {
                 completionHandler(Result.failure(NetworkError.connection))
             }
-            
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 25) {  // TODO: Ask
-            if !pokemonModelArray.isEmpty, fdsArray.count == pokemonModelArray.count,
-                hfdsArray.count == pokemonModelArray.count, oafdsArray.count == pokemonModelArray.count {
-                pokemonModelArray = pokemonModelArray.sorted{$0.id < $1.id}
-                fdsArray = fdsArray.sorted {$0.1 < $1.1}
-                hfdsArray = hfdsArray.sorted {$0.1 < $1.1}
-                oafdsArray = oafdsArray.sorted {$0.1 < $1.1}
-                for index in 0..<K.pokemonRequestLimit {
-                    pokemonModelArray[index].frontDefault = fdsArray[index].0
-                    pokemonModelArray[index].homeFrontDefault = hfdsArray[index].0
-                    pokemonModelArray[index].offArtFrontDefault = oafdsArray[index].0
-                }
-                completionHandler(Result.success(pokemonModelArray))
-            } else {
-                if pokemonModelArray.isEmpty {
-                    completionHandler(Result.failure(NetworkError.connection))
-                } else {
-                    completionHandler(Result.failure(NetworkError.serviceError))
-                }
+        group.notify(queue: .main) {
+            pokemonModelArray = pokemonModelArray.sorted{$0.id < $1.id}
+            fdsArray = fdsArray.sorted {$0.1 < $1.1}
+            hfdsArray = hfdsArray.sorted {$0.1 < $1.1}
+            oafdsArray = oafdsArray.sorted {$0.1 < $1.1}
+            for index in 0..<K.pokemonRequestLimit {
+                pokemonModelArray[index].frontDefault = fdsArray[index].0
+                pokemonModelArray[index].homeFrontDefault = hfdsArray[index].0
+                pokemonModelArray[index].offArtFrontDefault = oafdsArray[index].0
             }
-            
+            let diff = CFAbsoluteTimeGetCurrent() - start
+            print("Requests took \(diff) seconds")
+            completionHandler(Result.success(pokemonModelArray))
         }
-        
     }
     
 }

@@ -41,14 +41,13 @@ struct LocalPokemonRepository: LocalPokemonRepositorySpec {
             }
             
             completionHandler?(Result.success(()))
-            print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true))
+            //print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true))
         } catch {
             completionHandler?(Result.failure(error))
         }
     }
     
     func fetchPokemonList(_ completionHandler: @escaping FetchPokemonsCompletionHandler) {
-        print("fetch local")
         guard let data = UserDefaults.standard.data(forKey: K.localPokemonListPersistKey) else {
             completionHandler(Result.failure(LocalPokemonRepositoryError.noLocalCache))
             return

@@ -27,6 +27,7 @@ class NetworkServiceManger {
         let task: URLSessionDataTask = session.dataTask(with: request as URLRequest, completionHandler: {
             data, response, error in
             guard error == nil else {
+                fail()
                 return }
             guard let safeData = data else {
                 return }

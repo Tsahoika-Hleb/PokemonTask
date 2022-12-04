@@ -21,7 +21,7 @@ protocol PokemonListPresenterSpec {
 
 protocol PokemonListViewEventReceiverable: AnyObject {
     func receivedEventOfRefreshList()
-    func receivedEventOfShowAlert(title: String, content: String)
+    func receivedEventOfShowAlert(type: Error)
 }
 
 /// Presenter to PokemonListViewController
@@ -90,26 +90,15 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
             guard let self = self else { return }
             switch result {
             case .success(let pokemons):
-                print("success")
                 self.pokemons += pokemons
                 self.eventReceiver?.receivedEventOfRefreshList()
                 self.isNowLoading = false
             case .failure(let error):
-                if !self.pokemons.isEmpty {
-                    self.isNowLoading = false
-                }
                 if (error as! NetworkError == NetworkError.connection) {
-                    self.eventReceiver?
-                        .receivedEventOfShowAlert(title: "Fail", content: "An error occurred, please please check your internet connection.")
-                } else {
-                    self.eventReceiver?
-                        .receivedEventOfShowAlert(title: "Fail", content: "An data from API loading error occurred, please make sure you have a stable internet connection and try again.")
+                    self.eventReceiver?.receivedEventOfShowAlert(type: error)
                 }
-                if self.pokemons.isEmpty{
-                    self.updateList()
-                }
-                
             }
         }
     }
+    
 }

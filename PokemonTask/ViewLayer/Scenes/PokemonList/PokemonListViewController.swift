@@ -69,10 +69,16 @@ extension PokemonListViewController: PokemonListViewEventReceiverable {
         state = .showList
     }
     
-    func receivedEventOfShowAlert(title: String, content: String) {
-        let alert = UIAlertController(title: title, message: content, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "ok", style: .cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
+    func receivedEventOfShowAlert(type: Error) {
+        
+        let alert = Alerts.networkErrorAlert.rowValue
+        alert.addAction(UIAlertAction(title: "ok", style: .cancel) {_ in
+            self.presenter.updateList()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.tableView.reloadData()
+            }
+        })
+        self.present(alert, animated: true, completion: nil)
     }
     
 }
