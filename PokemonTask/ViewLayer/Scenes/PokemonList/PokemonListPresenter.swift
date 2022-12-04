@@ -21,7 +21,7 @@ protocol PokemonListPresenterSpec {
 
 protocol PokemonListViewEventReceiverable: AnyObject {
     func receivedEventOfRefreshList()
-    func receivedEventOfShowAlert(type: Error)
+    func receivedEventOfShowAlert(errorType: Error)
 }
 
 /// Presenter to PokemonListViewController
@@ -95,7 +95,7 @@ class PokemonListPresenter<AnyFetchShoesUseCase>: PokemonListPresenterSpec where
                 self.isNowLoading = false
             case .failure(let error):
                 if (error as! NetworkError == NetworkError.connection) {
-                    self.eventReceiver?.receivedEventOfShowAlert(type: error)
+                    self.eventReceiver?.receivedEventOfShowAlert(errorType: error)
                 }
             }
         }

@@ -29,7 +29,7 @@ struct CachePokemonRepository: PokemonRepositorySpec {
     
     // MARK: private
     
-    private var remoteRepository: PokemonRepositorySpec // TODO: check
+    private var remoteRepository: PokemonRepositorySpec
     private var localRepository: LocalPokemonRepositorySpec
     
 }

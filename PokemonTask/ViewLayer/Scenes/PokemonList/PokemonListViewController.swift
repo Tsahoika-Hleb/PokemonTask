@@ -24,7 +24,7 @@ class PokemonListViewController: BaseViewController {
     private enum TableViewOptions: Int {
         
         case numberOfSections = 2
-        case cellsToUpdate = 10
+        case cellsToUpdate = 5
         
         enum PokemonListCellOptions: Int {
             case pokemonCellHeight = 75
@@ -64,21 +64,24 @@ class PokemonListViewController: BaseViewController {
     
 }
 
+// MARK: - PokemonListViewEventReceiverable
+
 extension PokemonListViewController: PokemonListViewEventReceiverable {
     func receivedEventOfRefreshList() {
         state = .showList
     }
     
-    func receivedEventOfShowAlert(type: Error) {
-        
-        let alert = Alerts.networkErrorAlert.rowValue
-        alert.addAction(UIAlertAction(title: "ok", style: .cancel) {_ in
-            self.presenter.updateList()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.tableView.reloadData()
-            }
-        })
-        self.present(alert, animated: true, completion: nil)
+    func receivedEventOfShowAlert(errorType: Error) {
+        if errorType as! NetworkError == NetworkError.connection {
+            let alert = Alerts.networkErrorAlert.rowValue
+            alert.addAction(UIAlertAction(title: "ok", style: .cancel) {_ in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    self.presenter.updateList()
+                    self.tableView.reloadData()
+                }
+            })
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
 }

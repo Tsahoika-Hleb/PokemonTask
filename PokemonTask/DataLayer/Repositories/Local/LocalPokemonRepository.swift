@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 protocol LocalPokemonRepositorySpec: PokemonRepositorySpec {
     
@@ -17,51 +18,70 @@ enum LocalPokemonRepositoryError: Error {
     case noLocalCache
 }
 
-/// Cache PokemonModel to userDefaults
+/// Cache PokemonModel to CoreData
 struct LocalPokemonRepository: LocalPokemonRepositorySpec {
     func save(pokemon: [PokemonModel], completionHandler: SavePokemonsComplitionHandler?) {
-        do {
-            var pokemonData = try JSONEncoder().encode(pokemon)
-            guard let data = UserDefaults.standard.data(forKey: K.localPokemonListPersistKey) else {
-                UserDefaults.standard.set(pokemonData, forKey: K.localPokemonListPersistKey)
-                completionHandler?(Result.success(()))
-                return
+        for item in pokemon {
+            let managedContext = AppDelegate.sharedAppDelegate.coreDataStack.managedContext
+            let pokemonToSave = PokemonMO(context: managedContext)
+            var typesStringArray: [String] = []
+            for i in item.types {
+                typesStringArray.append(i.type.name)
             }
-    
-            do {
-                var existingData = try JSONDecoder().decode([PokemonModel].self, from: data)
-                for item in pokemon {
-                    existingData.append(item)
-                }
-                existingData = existingData.sorted {$0.id < $1.id}
-                pokemonData = try JSONEncoder().encode(existingData)
-                UserDefaults.standard.set(pokemonData, forKey: K.localPokemonListPersistKey)
-            } catch {
-                completionHandler?(Result.failure(error))
-            }
-            
-            completionHandler?(Result.success(()))
-            //print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true))
-        } catch {
-            completionHandler?(Result.failure(error))
+            let typesArrayData = try? JSONSerialization.data(withJSONObject: typesStringArray, options: [])
+            pokemonToSave.setValue(item.id, forKey: K.pokemonMOProperties.id)
+            pokemonToSave.setValue(item.name, forKey: K.pokemonMOProperties.name)
+            pokemonToSave.setValue(item.offArtFrontDefault, forKey: K.pokemonMOProperties.offArtFrontDefault)
+            pokemonToSave.setValue(item.frontDefault, forKey: K.pokemonMOProperties.frontDefault)
+            pokemonToSave.setValue(item.height, forKey: K.pokemonMOProperties.height)
+            pokemonToSave.setValue(item.homeFrontDefault, forKey: K.pokemonMOProperties.homeFrontDefault)
+            pokemonToSave.setValue(typesArrayData, forKey: K.pokemonMOProperties.types)
+            pokemonToSave.setValue(item.weight, forKey: K.pokemonMOProperties.weight)
+            AppDelegate.sharedAppDelegate.coreDataStack.saveContext()
         }
+        completionHandler?(Result.success(()))
     }
     
     func fetchPokemonList(_ completionHandler: @escaping FetchPokemonsCompletionHandler) {
-        guard let data = UserDefaults.standard.data(forKey: K.localPokemonListPersistKey) else {
-            completionHandler(Result.failure(LocalPokemonRepositoryError.noLocalCache))
-            return
-        }
+        let pokemonsFetch: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
         do {
-            let dataModel = try JSONDecoder().decode([PokemonModel].self, from: data)
-            completionHandler(Result.success(dataModel))
-        } catch {
-            completionHandler(Result.failure(error))
+            let managedContext = AppDelegate.sharedAppDelegate.coreDataStack.managedContext
+            let results = try managedContext.fetch(pokemonsFetch)
+            
+            var pokemons: [PokemonModel] = []
+            for item in results {
+                var typesArray: [PokemonModel.PokemonType] = []
+                let typesStrAarray = (try? JSONSerialization.jsonObject(with: item.types!, options: [])) as? [String]
+                for typeName in typesStrAarray! {
+                    typesArray.append(PokemonModel.PokemonType(type: PokemonModel.PokemonTypeName(name: typeName)))
+                }
+                pokemons.append(PokemonModel(name: item.name!, height: Int(item.height), weight: Int(item.weight),
+                                             types: typesArray, id: Int(item.id),
+                                             frontDefault: item.frontDefault,
+                                             homeFrontDefault: item.homeFrontDefault,
+                                             offArtFrontDefault: item.offArtFrontDefault))
+            }
+            if pokemons.isEmpty {
+                completionHandler(Result.failure(LocalPokemonRepositoryError.noLocalCache))
+            } else {
+                completionHandler(Result.success(pokemons))
+            }
+        } catch let error as NSError {
+            print("Fetch error: \(error) description: \(error.userInfo)")
         }
     }
     
     static func removeAll() {
-        UserDefaults.standard.removeObject(forKey: K.localPokemonListPersistKey)
+        let pokemonsFetch: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
+        do {
+            let managedContext = AppDelegate.sharedAppDelegate.coreDataStack.managedContext
+            let results = try managedContext.fetch(pokemonsFetch)
+            for item in results {
+                managedContext.delete(item)
+            }
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Fetch error: \(error) description: \(error.userInfo)")
+        }
     }
-    
 }

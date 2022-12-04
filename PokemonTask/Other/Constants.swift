@@ -20,7 +20,8 @@ struct K {
     static let loadingCellNibName = "LoadingTableViewCell"
     
     /// key for UserDefaults
-    static let localPokemonListPersistKey = "localPokemonListPersistKey"
+    //static let localPokemonListPersistKey = "localPokemonListPersistKey"
+    static let coreDataModelName = "Pokemons"
 
     struct apiURLs {
         static let apiURL = "https://pokeapi.co/api/v2/pokemon"
@@ -28,5 +29,16 @@ struct K {
         static let frontDefaultURL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
         static let homeFrontDefaultURl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/"
         static let offArtFrontDefaultURL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/"
+    }
+    
+    struct pokemonMOProperties {
+        static let id = "id"
+        static let name = "name"
+        static let offArtFrontDefault  = "offArtFrontDefault"
+        static let frontDefault = "frontDefault"
+        static let height = "height"
+        static let homeFrontDefault = "homeFrontDefault"
+        static let types = "types"
+        static let weight = "weight"
     }
 }
