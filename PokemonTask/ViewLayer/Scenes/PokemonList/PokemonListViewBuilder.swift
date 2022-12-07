@@ -11,7 +11,7 @@ struct PokemonListViewBuilder: ViewBuilderSpec {
     
     func build() -> PokemonListViewController {
         
-        let remoteRepository = RemotePokemonRepository(fetcher: PokemonListFetcher())
+        let remoteRepository = RemotePokemonRepository(fetcher: PokemonListFetcher(pokemonApiManage: PokemonApiManager(), imageDataManager: ImageDataManager()))
         let cacheRepository = CachePokemonRepository(remoteRepository: remoteRepository, localRepository: LocalPokemonRepository())
         let fetchLocalPokemonUseCase = FetchPokemonListUseCase(repository: LocalPokemonRepository())
         let fetchPokemonUseCase = FetchPokemonListUseCase(repository: cacheRepository)

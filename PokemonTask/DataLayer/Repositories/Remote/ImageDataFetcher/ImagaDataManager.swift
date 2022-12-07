@@ -8,15 +8,19 @@
 import Foundation
 
 class ImageDataManager {
-    public static let shared = ImageDataManager()
-    var curruntOffset = 0
-    
     // Fetch image data by URL
     func fetchImage(url: String, success: @escaping ((Data) -> Void), fail: @escaping (() -> Void)) {
-        ImageServiceManger.shared.callImageService(urlString: url) { (response: Data) in
-            success(response)
-        } fail: {
-            fail()
-        }
+        let url = URL(string: url)
+        guard let urlObj = url else { return }
+        let session = URLSession.shared
+        let request = URLRequest(url: urlObj)
+    
+        let task: URLSessionDataTask = session.dataTask(with: request as URLRequest, completionHandler: {
+            data, response, error in
+            guard error == nil else { return }
+            guard let safeData = data else { return }
+            success(safeData)
+        })
+        task.resume()
     }
 }

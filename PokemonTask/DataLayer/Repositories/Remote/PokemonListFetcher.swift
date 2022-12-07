@@ -11,21 +11,27 @@ struct PokemonListFetcher: NetworkFetchable {
     
     typealias DataModel = [PokemonModel]
     
+    init(pokemonApiManage: PokemonApiManager, imageDataManager: ImageDataManager){
+        self.pokemonApiManage = pokemonApiManage
+        self.imageDataManager = imageDataManager
+    }
+    
     func fire(_ completionHandler: @escaping (Result<[PokemonModel], NetworkError>) -> ()) {
         
         var pokemonModelArray: [PokemonModel] = []
         var fdsArray: [(Data, Int)] = []
         var hfdsArray:  [(Data, Int)] = []
         var oafdsArray:  [(Data, Int)] = []
-        
+
         let group = DispatchGroup()
         
         let start = CFAbsoluteTimeGetCurrent()
         
         // Fetch array of PokemonModel and 3 arrays of each sprite
         for id in 1...K.pokemonRequestLimit {
+            let currentId = id + K.currentOffset
             group.enter()
-            PokemonApiManager.shared.fetchPokemon(id: id + K.currentOffset) { (response) in
+            pokemonApiManage.fetchPokemon(id: currentId) { (response) in
                 pokemonModelArray.append(response)
                 group.leave()
             } fail: {
@@ -34,26 +40,23 @@ struct PokemonListFetcher: NetworkFetchable {
                 }
             }
             group.enter()
-            ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.frontDefaultURL)\(id + K.currentOffset).png") { (response) in
-                fdsArray.append((response, id))
-                group.leave()
-            } fail: {
-                completionHandler(Result.failure(NetworkError.connection))
-            }
-            group.enter()
-            ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.homeFrontDefaultURl)\(id + K.currentOffset).png") { (response) in
-                hfdsArray.append((response, id))
-                group.leave()
-            } fail: {
-                completionHandler(Result.failure(NetworkError.connection))
-            }
-            group.enter()
-            ImageDataManager.shared.fetchImage(url: "\(K.apiURLs.offArtFrontDefaultURL)\(id + K.currentOffset).png") { (response) in
+            imageDataManager.fetchImage(url: "\(K.apiURLs.offArtFrontDefaultURL)\(currentId).png") { (response) in
                 oafdsArray.append((response, id))
                 group.leave()
-            } fail: {
-                completionHandler(Result.failure(NetworkError.connection))
-            }
+                //print("get image3 for id: \(currentId)")
+            } fail: {}
+            group.enter()
+            imageDataManager.fetchImage(url: "\(K.apiURLs.frontDefaultURL)\(currentId).png") { (response) in
+                fdsArray.append((response, id))
+                group.leave()
+                //print("get image1 for id: \(currentId)")
+            } fail: {}
+            group.enter()
+            imageDataManager.fetchImage(url: "\(K.apiURLs.homeFrontDefaultURl)\(currentId).png") { (response) in
+                hfdsArray.append((response, id))
+                group.leave()
+                //print("get image2 for id: \(currentId)")
+            } fail: {}
         }
         
         group.notify(queue: .main) {
@@ -66,10 +69,13 @@ struct PokemonListFetcher: NetworkFetchable {
                 pokemonModelArray[index].homeFrontDefault = hfdsArray[index].0
                 pokemonModelArray[index].offArtFrontDefault = oafdsArray[index].0
             }
-            let diff = CFAbsoluteTimeGetCurrent() - start
-            print("Requests took \(diff) seconds")
+            print("Requests took \(CFAbsoluteTimeGetCurrent() - start) seconds")
             completionHandler(Result.success(pokemonModelArray))
         }
     }
     
+    // MARK: private
+    
+    private var pokemonApiManage:PokemonApiManager
+    private var imageDataManager:ImageDataManager
 }

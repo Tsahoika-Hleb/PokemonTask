@@ -19,8 +19,7 @@ struct K {
     static let loadingTableViewCellID = "loadingcellid"
     static let loadingCellNibName = "LoadingTableViewCell"
     
-    /// key for UserDefaults
-    //static let localPokemonListPersistKey = "localPokemonListPersistKey"
+    
     static let coreDataModelName = "Pokemons"
 
     struct apiURLs {
